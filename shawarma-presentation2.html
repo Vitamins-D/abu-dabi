@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>АБУ-даби - Презентация</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #FFF8F0;
+            overflow-x: hidden;
+            overflow-y: hidden;
+            height: 100vh;
+        }
+
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100vh;
+            display: none;
+            background: #FFF8F0;
+            padding: 60px 80px;
+            opacity: 0;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            opacity: 1;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .slide-header {
+            font-size: 48px;
+            font-weight: bold;
+            color: #8B4513;
+            margin-bottom: 30px;
+            border-bottom: 4px solid #FF6B35;
+            padding-bottom: 15px;
+            animation: slideInDown 0.8s ease;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+        }
+
+        .slide.active .slide-content > * {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .slide.active .slide-content > *:nth-child(1) { animation-delay: 0.1s; }
+        .slide.active .slide-content > *:nth-child(2) { animation-delay: 0.2s; }
+        .slide.active .slide-content > *:nth-child(3) { animation-delay: 0.3s; }
+        .slide.active .slide-content > *:nth-child(4) { animation-delay: 0.4s; }
+
+        .highlight {
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin: 20px 0;
+            box-shadow: 0 10px 40px rgba(255, 107, 53, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .highlight:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(255, 107, 53, 0.4);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #FF6B35 0%, #FDB827 100%);
+            padding: 30px;
+            border-radius: 20px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide.active .stat-box {
+            animation: scaleIn 0.6s ease forwards;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-10px) rotate(2deg);
+            box-shadow: 0 15px 35px rgba(255, 107, 53, 0.5);
+        }
+
+        .stat-number {
+            font-size: 42px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .stat-label {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+
+        .list-item {
+            padding: 15px 25px;
+            margin: 10px 0;
+            background: white;
+            border-left: 5px solid #FF6B35;
+            border-radius: 10px;
+            font-size: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .list-item:hover {
+            transform: translateX(8px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.2);
+            border-left-width: 8px;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            padding: 15px 30px;
+            background: white;
+            border: 3px solid #FF6B35;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            color: #FF6B35;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #FF6B35;
+            color: white;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        .nav-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .slide-number {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            color: white;
+            font-size: 18px;
+            background: rgba(139, 69, 19, 0.8);
+            padding: 12px 24px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            font-weight: bold;
+        }
+
+        .title-slide {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 50%, #FDB827 100%);
+            color: white;
+        }
+
+        .title-slide .slide-header {
+            font-size: 82px;
+            color: white;
+            border: none;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        }
+
+        .slide.active.title-slide .slide-header {
+            animation: scaleIn 1s ease;
+        }
+
+        .subtitle {
+            font-size: 36px;
+            margin-bottom: 40px;
+            opacity: 0.95;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .slide.active .subtitle {
+            animation: fadeInUp 1.2s ease;
+        }
+
+        .tagline {
+            font-size: 26px;
+            font-style: italic;
+            margin-top: 30px;
+            opacity: 0.9;
+            background: rgba(255,255,255,0.2);
+            padding: 15px 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .slide.active .tagline {
+            animation: fadeInUp 1.4s ease;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        .column {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .column:hover {
+            transform: translateY(-5px);
+        }
+
+        .column h3 {
+            color: #FF6B35;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .emphasis {
+            color: #FF6B35;
+            font-weight: bold;
+        }
+
+        .chart-bar {
+            background: #FFE8DC;
+            height: 50px;
+            border-radius: 25px;
+            margin: 15px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .chart-fill {
+            background: linear-gradient(90deg, #FF6B35 0%, #FDB827 100%);
+            height: 100%;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 2px 10px rgba(255, 107, 53, 0.4);
+            transition: width 1.2s ease;
+            width: 0;
+            white-space: nowrap;
+        }
+
+        .slide.active .chart-fill {
+            width: var(--chart-width) !important;
+        }
+
+        .scroll-hint {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 14px;
+            opacity: 0;
+            animation: fadeInOut 2s ease-in-out infinite;
+            background: rgba(139, 69, 19, 0.8);
+            padding: 8px 16px;
+            border-radius: 20px;
+            pointer-events: none;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 0.8; }
+        }
+
+        .slide-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .slide-content::-webkit-scrollbar-track {
+            background: #FFE8DC;
+            border-radius: 10px;
+        }
+
+        .slide-content::-webkit-scrollbar-thumb {
+            background: #FF6B35;
+            border-radius: 10px;
+        }
+
+        .slide-content::-webkit-scrollbar-thumb:hover {
+            background: #F7931E;
+        }
+
+        .exclusive-item {
+            background: linear-gradient(135deg, #FFD700 0%, #FF6B35 100%);
+            color: white;
+            border: none;
+            box-shadow: 0 5px 25px rgba(255, 215, 0, 0.5);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        small {
+            opacity: 0.8;
+            font-size: 14px;
+        }
+
+        .advantage-item {
+            margin: 20px 0;
+        }
+
+        .advantage-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .advantage-label {
+            font-weight: bold;
+            flex: 1;
+        }
+
+        .advantage-value {
+            flex: 1;
+            text-align: right;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <div class="slide-content">
+                <div class="slide-header">АБУ-даби</div>
+                <div class="subtitle">Студенческая шаурменная нового поколения</div>
+                <div class="tagline">"Ну типа как Дубай, только в Калининграде!"</div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Ключевые показатели -->
+        <div class="slide">
+            <div class="slide-header">Ключевые показатели проекта</div>
+            <div class="slide-content">
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-number">350 000₽</div>
+                        <div class="stat-label">Инвестиции</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">3-4 мес</div>
+                        <div class="stat-label">Окупаемость</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">411%</div>
+                        <div class="stat-label">ROI годовых</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">120 000₽</div>
+                        <div class="stat-label">Прибыль/месяц</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">65%</div>
+                        <div class="stat-label">Рентабельность</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">1 456</div>
+                        <div class="stat-label">Студентов КИТиС</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Концепция -->
+        <div class="slide">
+            <div class="slide-header">Концепция бизнеса</div>
+            <div class="slide-content">
+                <div class="highlight">
+                    <h2 style="margin-bottom: 20px; font-size: 32px;">🎯 Уникальное торговое предложение</h2>
+                    <p style="font-size: 22px; line-height: 1.6;">
+                        Точка быстрого питания take-away с <span class="emphasis" style="color: #ffd700;">инновационным продуктом</span> — 
+                        шаурма "АБУ-даби" с дубайским шоколадом (фисташковая паста, тесто кнафе, шоколад)
+                    </p>
+                </div>
+                <div class="list-item">📍 Расположение: у входа в КИТиС (50 метров)</div>
+                <div class="list-item">💰 Цены на 15-20% ниже конкурентов</div>
+                <div class="list-item">⚡ Приготовление за 3-5 минут</div>
+                <div class="list-item">🎁 Программа лояльности: 10-я шаурма бесплатно</div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Целевая аудитория -->
+        <div class="slide">
+            <div class="slide-header">Целевая аудитория</div>
+            <div class="slide-content">
+                <div class="two-column">
+                    <div class="column">
+                        <h3>📊 Основная аудитория</h3>
+                        <div style="margin-top: 20px;">
+                            <p style="font-size: 20px; margin: 15px 0;"><strong>1 456 студентов КИТиС</strong></p>
+                            <p style="font-size: 18px; margin: 10px 0;">• Возраст: 16-23 года</p>
+                            <p style="font-size: 18px; margin: 10px 0;">• Бюджет: 250-400₽ на обед</p>
+                            <p style="font-size: 18px; margin: 10px 0;">• Покупки: 4-5 раз в неделю</p>
+                            <p style="font-size: 18px; margin: 10px 0;">• Активны в соцсетях</p>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <h3>🎯 Вторичная аудитория</h3>
+                        <div style="margin-top: 20px;">
+                            <p style="font-size: 18px; margin: 15px 0;">• Жители Ленинградского района</p>
+                            <p style="font-size: 18px; margin: 15px 0;">• Работники офисов (500м радиус)</p>
+                            <p style="font-size: 18px; margin: 15px 0;">• Автомобилисты на ул. Горького</p>
+                            <div style="margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #FF6B35 0%, #FDB827 100%); border-radius: 15px; color: white;">
+                                <strong style="font-size: 20px;">Конверсия: 5-7% от трафика</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Меню -->
+        <div class="slide">
+            <div class="slide-header">Меню и цены</div>
+            <div class="slide-content">
+                <div class="two-column">
+                    <div>
+                        <h3 style="color: #FF6B35; margin-bottom: 20px;">🌯 Основное меню</h3>
+                        <div class="list-item">Классическая — 250₽</div>
+                        <div class="list-item">Острая — 270₽</div>
+                        <div class="list-item">Говяжья — 300₽</div>
+                        <div class="list-item">Вегетарианская — 230₽</div>
+                        <div class="list-item exclusive-item">
+                            ⭐ АБУ-даби (ЭКСКЛЮЗИВ) — 350₽
+                        </div>
+                        <div class="list-item">Мега (двойная) — 400₽</div>
+                    </div>
+                    <div>
+                        <h3 style="color: #FF6B35; margin-bottom: 20px;">🎁 Комбо-предложения</h3>
+                        <div class="list-item">"Студенческий обед" — 330₽<br><small>Шаурма + напиток</small></div>
+                        <div class="list-item">"Большой перерыв" — 440₽<br><small>Мега + фри + напиток</small></div>
+                        <div class="list-item">"Попробуй АБУ-даби" — 450₽<br><small>АБУ-даби + напиток + наггетсы</small></div>
+                        <div style="margin-top: 30px; padding: 25px; background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                            <strong style="font-size: 20px; color: #FF6B35;">Программа лояльности:</strong>
+                            <p style="margin-top: 10px; font-size: 18px;">✓ Скидка 10% по студенческому<br>✓ Каждая 10-я бесплатно</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Конкурентные преимущества -->
+        <div class="slide">
+            <div class="slide-header">Конкурентные преимущества</div>
+            <div class="slide-content">
+                <div style="margin-top: 20px;">
+                    <div class="advantage-item">
+                        <div class="advantage-header">
+                            <span class="advantage-label">Средний чек</span>
+                            <span class="advantage-value">Мы: 250-300₽ | Конкуренты: 280-400₽</span>
+                        </div>
+                        <div class="chart-bar">
+                            <div class="chart-fill" style="--chart-width: 70%;">на 15-20% ниже</div>
+                        </div>
+                    </div>
+                    <div class="advantage-item">
+                        <div class="advantage-header">
+                            <span class="advantage-label">Время обслуживания</span>
+                            <span class="advantage-value">Мы: 3-5 мин | Конкуренты: 7-15 мин</span>
+                        </div>
+                        <div class="chart-bar">
+                            <div class="chart-fill" style="--chart-width: 35%;">в 2-3 раза быстрее</div>
+                        </div>
+                    </div>
+                    <div class="advantage-item">
+                        <div class="advantage-header">
+                            <span class="advantage-label">Уникальный продукт</span>
+                            <span class="advantage-value">Шаурма "АБУ-даби" с дубайским шоколадом</span>
+                        </div>
+                        <div class="chart-bar">
+                            <div class="chart-fill exclusive-item" style="--chart-width: 100%;">ЭКСКЛЮЗИВ ⭐</div>
+                        </div>
+                    </div>
+                    <div class="advantage-item">
+                        <div class="advantage-header">
+                            <span class="advantage-label">Расположение</span>
+                            <span class="advantage-value">У входа в КИТиС vs 50-200м от колледжа</span>
+                        </div>
+                        <div class="chart-bar">
+                            <div class="chart-fill" style="--chart-width: 95%;">Оптимальная локация</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Финансовые показатели -->
+        <div class="slide">
+            <div class="slide-header">Финансовый прогноз</div>
+            <div class="slide-content">
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-number">588 000₽</div>
+                        <div class="stat-label">Выручка месяц 1-2</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">885 000₽</div>
+                        <div class="stat-label">Выручка месяц 3-4</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">1 417 500₽</div>
+                        <div class="stat-label">Выручка месяц 7-12</div>
+                    </div>
+                </div>
+                <div style="margin-top: 40px; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                    <h3 style="color: #FF6B35; margin-bottom: 20px; font-size: 28px;">📈 Динамика прибыли</h3>
+                    <div style="font-size: 20px; line-height: 2;">
+                        <p>Месяц 1-2: <strong>95 000 - 105 000₽</strong> чистой прибыли</p>
+                        <p>Месяц 3-4: <strong>120 000 - 130 000₽</strong> чистой прибыли</p>
+                        <p>Месяц 7-12: <strong>145 000₽</strong> чистой прибыли</p>
+                        <p style="color: #FF6B35; margin-top: 20px;"><strong>Годовая прибыль: 7 663 920₽</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Инвестиции -->
+        <div class="slide">
+            <div class="slide-header">Структура инвестиций</div>
+            <div class="slide-content">
+                <div class="two-column">
+                    <div class="column">
+                        <h3>💰 Капитальные затраты</h3>
+                        <div style="margin-top: 20px; font-size: 18px;">
+                            <p style="margin: 10px 0;">Оборудование: <strong>189 000₽</strong></p>
+                            <p style="margin: 10px 0;">Инвентарь: <strong>12 500₽</strong></p>
+                            <p style="margin: 10px 0;">Униформа: <strong>9 000₽</strong></p>
+                            <p style="margin: 10px 0;">Ремонт: <strong>53 000₽</strong></p>
+                            <p style="margin: 10px 0;">Юридические: <strong>17 000₽</strong></p>
+                            <p style="margin: 10px 0;">Маркетинг: <strong>30 000₽</strong></p>
+                            <p style="margin: 10px 0;">Закупки: <strong>20 000₽</strong></p>
+                            <p style="margin: 10px 0;">Резерв: <strong>20 000₽</strong></p>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <h3>📊 Итого инвестиций</h3>
+                        <div style="margin-top: 30px;">
+                            <div style="background: linear-gradient(135deg, #FF6B35 0%, #FDB827 100%); color: white; padding: 40px; border-radius: 20px; text-align: center; box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);">
+                                <div style="font-size: 56px; font-weight: bold; margin-bottom: 15px;">350 000₽</div>
+                                <div style="font-size: 24px; opacity: 0.95;">Полная сумма инвестиций</div>
+                            </div>
+                            <div style="margin-top: 30px; padding: 25px; background: #FFF8F0; border-radius: 15px; border-left: 5px solid #FF6B35;">
+                                <p style="font-size: 20px; line-height: 1.6;">
+                                    <strong>Возврат инвестиций:</strong><br>
+                                    через 3-4 месяца работы при консервативном сценарии
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Маркетинговая стратегия -->
+        <div class="slide">
+            <div class="slide-header">Маркетинговая стратегия</div>
+            <div class="slide-content">
+                <div class="highlight" style="padding: 30px;">
+                    <h2 style="margin-bottom: 20px; font-size: 28px;">🚀 Вирусный маркетинг</h2>
+                    <p style="font-size: 20px; line-height: 1.6;">
+                        Шаурма "АБУ-даби" — Instagram-friendly продукт, который создаст ажиотаж в соцсетях
+                    </p>
+                </div>
+                <div class="two-column" style="margin-top: 30px;">
+                    <div>
+                        <h3 style="color: #FF6B35; margin-bottom: 15px;">📱 Онлайн</h3>
+                        <div class="list-item">ВКонтакте + Telegram-канал</div>
+                        <div class="list-item">Сотрудничество с блогерами</div>
+                        <div class="list-item">Конкурсы и розыгрыши</div>
+                        <div class="list-item">Stories и прямые трансляции</div>
+                    </div>
+                    <div>
+                        <h3 style="color: #FF6B35; margin-bottom: 15px;">🎯 Офлайн</h3>
+                        <div class="list-item">Раздача флаеров у КИТиС</div>
+                        <div class="list-item">Фотозона для селфи</div>
+                        <div class="list-item">Промо-акции на открытие</div>
+                        <div class="list-item">Партнёрство с колледжем</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Риски -->
+        <div class="slide">
+            <div class="slide-header">Управление рисками</div>
+            <div class="slide-content">
+                <div style="margin-top: 20px;">
+                    <div class="list-item">
+                        <strong>Сезонность (летние каникулы)</strong><br>
+                        <small>Меры: финансовая подушка, переориентация на жителей района, агрегаторы доставки</small>
+                    </div>
+                    <div class="list-item">
+                        <strong>Усиление конкуренции</strong><br>
+                        <small>Меры: уникальный продукт "АБУ-даби", программа лояльности, постоянное улучшение</small>
+                    </div>
+                    <div class="list-item">
+                        <strong>Рост цен на продукты</strong><br>
+                        <small>Меры: работа с несколькими поставщиками, долгосрочные договоры</small>
+                    </div>
+                    <div class="list-item">
+                        <strong>Проблемы с персоналом</strong><br>
+                        <small>Меры: конкурентная зарплата, система мотивации, резервные кандидаты</small>
+                    </div>
+                </div>
+                <div style="margin-top: 30px; padding: 25px; background: linear-gradient(135deg, #FF6B35 0%, #FDB827 100%); border-radius: 20px; color: white; box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);">
+                    <strong style="font-size: 24px;">✅ Даже при пессимистичном сценарии (-30% продаж)</strong><br>
+                    <p style="font-size: 20px; margin-top: 15px;">Проект остаётся прибыльным с окупаемостью 4,3 месяца и ROI 280%</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Timeline -->
+        <div class="slide">
+            <div class="slide-header">План запуска</div>
+            <div class="slide-content">
+                <div style="font-size: 20px;">
+                    <div class="list-item">
+                        <strong>Недели 1-2: Подготовка</strong><br>
+                        Поиск помещения, регистрация ИП, поиск поставщиков
+                    </div>
+                    <div class="list-item">
+                        <strong>Недели 3-5: Обустройство</strong><br>
+                        Ремонт, установка оборудования, финализация меню
+                    </div>
+                    <div class="list-item">
+                        <strong>Недели 5-6: Персонал</strong><br>
+                        Поиск и обучение сотрудников, оформление документов
+                    </div>
+                    <div class="list-item">
+                        <strong>Недели 6-7: Маркетинг</strong><br>
+                        Создание соцсетей, тизерная кампания, раздача флаеров
+                    </div>
+                    <div class="list-item">
+                        <strong>Неделя 7: Пробный запуск</strong><br>
+                        Мягкое открытие, тестирование, сбор обратной связи
+                    </div>
+                    <div class="list-item exclusive-item">
+                        <strong>Неделя 8: ОТКРЫТИЕ! 🎉</strong><br>
+                        Официальный запуск с промо-акциями
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Потенциал роста -->
+        <div class="slide">
+            <div class="slide-header">Потенциал масштабирования</div>
+            <div class="slide-content">
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-number">12 мес</div>
+                        <div class="stat-label">Открытие 2-й точки</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">24 мес</div>
+                        <div class="stat-label">Сеть из 3 точек</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">36 мес</div>
+                        <div class="stat-label">Франчайзинг</div>
+                    </div>
+                </div>
+                <div style="margin-top: 40px; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+                    <h3 style="color: #FF6B35; margin-bottom: 20px; font-size: 28px;">💼 Стратегия выхода</h3>
+                    <div style="font-size: 20px; line-height: 2;">
+                        <p><strong>Через 12 месяцев:</strong> стоимость бизнеса 1,2-1,4 млн₽</p>
+                        <p><strong>Через 24 месяца:</strong> стоимость бизнеса 1,8-2,25 млн₽</p>
+                        <p><strong>Через 36 месяцев:</strong> сеть стоимостью 5-7 млн₽</p>
+                        <p style="margin-top: 20px; padding: 20px; background: linear-gradient(135deg, #FF6B35 0%, #FDB827 100%); color: white; border-radius: 15px;">
+                            <strong>ROI для инвестора: от 343% до 2000%</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13: Call to Action -->
+        <div class="slide title-slide">
+            <div class="slide-content">
+                <div class="slide-header">Инвестируйте в успех! 🚀</div>
+                <div style="font-size: 32px; margin: 40px 0; line-height: 1.8;">
+                    <p><strong>350 000₽</strong> инвестиций</p>
+                    <p style="margin: 20px 0;">превратятся в бизнес стоимостью</p>
+                    <p><strong style="font-size: 48px; color: #ffd700;">1,5-2,5 млн₽</strong></p>
+                    <p style="margin: 20px 0;">всего за 12-24 месяца</p>
+                </div>
+                <div style="margin-top: 50px; font-size: 28px;">
+                    <p>📞 Свяжитесь с нами для обсуждения деталей</p>
+                    <p style="margin-top: 20px; opacity: 0.9;">Следующий шаг — встреча и Due Diligence</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" onclick="prevSlide()">← Назад</button>
+        <button class="nav-btn" onclick="nextSlide()">Далее →</button>
+    </div>
+
+    <div class="slide-number">
+        <span id="current-slide">1</span> / <span id="total-slides">13</span>
+    </div>
+
+    <div class="scroll-hint">Прокрутите колёсико мыши ↓</div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        let isScrolling = false;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            if (isScrolling) return;
+            isScrolling = true;
+
+            slides[currentSlide].classList.remove('active');
+            
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+            
+            setTimeout(() => {
+                isScrolling = false;
+            }, 600);
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevSlide();
+        });
+
+        // Mouse wheel navigation
+        let scrollTimeout;
+        document.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                if (e.deltaY > 0) {
+                    nextSlide();
+                } else if (e.deltaY < 0) {
+                    prevSlide();
+                }
+            }, 50);
+        }, { passive: false });
+
+        // Touch navigation for mobile
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartY = e.changedTouches[0].screenY;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartY - touchEndY;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }
+        }
+
+        // Hide scroll hint after first interaction
+        let hintHidden = false;
+        function hideScrollHint() {
+            if (!hintHidden) {
+                document.querySelector('.scroll-hint').style.display = 'none';
+                hintHidden = true;
+            }
+        }
+
+        document.addEventListener('wheel', hideScrollHint, { once: true });
+        document.addEventListener('keydown', hideScrollHint, { once: true });
+        document.addEventListener('click', hideScrollHint, { once: true });
+    </script>
+</body>
+</html>
