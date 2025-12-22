@@ -17,6 +17,7 @@
             overflow-x: hidden;
             overflow-y: hidden;
             height: 100vh;
+            width: 100vw;
         }
 
         .presentation {
@@ -34,12 +35,14 @@
             background: #FFF8F0;
             padding: 60px 80px;
             opacity: 0;
+            visibility: hidden;
         }
 
         .slide.active {
             display: flex;
             flex-direction: column;
             opacity: 1;
+            visibility: visible;
             animation: fadeIn 0.5s ease forwards;
         }
 
@@ -55,7 +58,10 @@
             margin-bottom: 30px;
             border-bottom: 4px solid #FF6B35;
             padding-bottom: 15px;
-            animation: slideInDown 0.8s ease;
+        }
+
+        .slide.active .slide-header {
+            animation: slideInDown 0.8s ease forwards;
         }
 
         @keyframes slideInDown {
@@ -97,11 +103,17 @@
             flex-direction: column;
             justify-content: center;
             overflow-y: auto;
+            overflow-x: hidden;
             max-height: calc(100vh - 200px);
+        }
+
+        .slide-content > * {
+            opacity: 0;
         }
 
         .slide.active .slide-content > * {
             animation: fadeInUp 0.8s ease forwards;
+            opacity: 1;
         }
 
         .slide.active .slide-content > *:nth-child(1) { animation-delay: 0.1s; }
@@ -117,6 +129,7 @@
             margin: 20px 0;
             box-shadow: 0 10px 40px rgba(255, 107, 53, 0.3);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            will-change: transform;
         }
 
         .highlight:hover {
@@ -139,10 +152,13 @@
             text-align: center;
             box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform;
+            opacity: 0;
         }
 
         .slide.active .stat-box {
             animation: scaleIn 0.6s ease forwards;
+            opacity: 1;
         }
 
         .stat-box:hover {
@@ -171,6 +187,7 @@
             font-size: 20px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.08);
             transition: all 0.3s ease;
+            will-change: transform;
         }
 
         .list-item:hover {
@@ -199,6 +216,7 @@
             color: #FF6B35;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             transition: all 0.3s ease;
+            will-change: transform;
         }
 
         .nav-btn:hover {
@@ -239,28 +257,31 @@
             border: none;
             margin-bottom: 20px;
             text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            opacity: 0;
         }
 
         .slide.active.title-slide .slide-header {
-            animation: scaleIn 1s ease;
+            animation: scaleIn 1s ease forwards;
+            opacity: 1;
         }
 
         .subtitle {
             font-size: 36px;
             margin-bottom: 40px;
-            opacity: 0.95;
+            opacity: 0;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
         .slide.active .subtitle {
-            animation: fadeInUp 1.2s ease;
+            animation: fadeInUp 1.2s ease forwards;
+            opacity: 1;
         }
 
         .tagline {
             font-size: 26px;
             font-style: italic;
             margin-top: 30px;
-            opacity: 0.9;
+            opacity: 0;
             background: rgba(255,255,255,0.2);
             padding: 15px 30px;
             border-radius: 15px;
@@ -268,7 +289,8 @@
         }
 
         .slide.active .tagline {
-            animation: fadeInUp 1.4s ease;
+            animation: fadeInUp 1.4s ease forwards;
+            opacity: 1;
         }
 
         .two-column {
@@ -284,6 +306,7 @@
             border-radius: 15px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             transition: transform 0.3s ease;
+            will-change: transform;
         }
 
         .column:hover {
@@ -431,19 +454,19 @@
                         <div class="stat-label">Инвестиции</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-number">3-4 мес</div>
+                        <div class="stat-number">8-10 мес</div>
                         <div class="stat-label">Окупаемость</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-number">411%</div>
+                        <div class="stat-number">34-41%</div>
                         <div class="stat-label">ROI годовых</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-number">120 000₽</div>
-                        <div class="stat-label">Прибыль/месяц</div>
+                        <div class="stat-number">100-120к₽</div>
+                        <div class="stat-label">Прибыль/месяц (средняя)</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-number">65%</div>
+                        <div class="stat-number">40-45%</div>
                         <div class="stat-label">Рентабельность</div>
                     </div>
                     <div class="stat-box">
@@ -583,25 +606,26 @@
             <div class="slide-content">
                 <div class="stats-grid">
                     <div class="stat-box">
-                        <div class="stat-number">588 000₽</div>
+                        <div class="stat-number">243 000₽</div>
                         <div class="stat-label">Выручка месяц 1-2</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-number">885 000₽</div>
+                        <div class="stat-number">470 000₽</div>
                         <div class="stat-label">Выручка месяц 3-4</div>
                     </div>
                     <div class="stat-box">
-                        <div class="stat-number">1 417 500₽</div>
+                        <div class="stat-number">915 000₽</div>
                         <div class="stat-label">Выручка месяц 7-12</div>
                     </div>
                 </div>
                 <div style="margin-top: 40px; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
                     <h3 style="color: #FF6B35; margin-bottom: 20px; font-size: 28px;">📈 Динамика прибыли</h3>
                     <div style="font-size: 20px; line-height: 2;">
-                        <p>Месяц 1-2: <strong>95 000 - 105 000₽</strong> чистой прибыли</p>
-                        <p>Месяц 3-4: <strong>120 000 - 130 000₽</strong> чистой прибыли</p>
-                        <p>Месяц 7-12: <strong>145 000₽</strong> чистой прибыли</p>
-                        <p style="color: #FF6B35; margin-top: 20px;"><strong>Годовая прибыль: 7 663 920₽</strong></p>
+                        <p>Месяц 1: <strong>-71 400₽</strong> (убыток — норма для старта)</p>
+                        <p>Месяц 2: <strong>4 740₽</strong> чистой прибыли</p>
+                        <p>Месяц 3-4: <strong>111 000 - 191 000₽</strong> чистой прибыли</p>
+                        <p>Месяц 7-12: <strong>100 000 - 120 000₽/мес</strong> (средняя)</p>
+                        <p style="color: #FF6B35; margin-top: 20px;"><strong>Годовая прибыль: 3 000 000₽</strong></p>
                     </div>
                 </div>
             </div>
@@ -635,7 +659,7 @@
                             <div style="margin-top: 30px; padding: 25px; background: #FFF8F0; border-radius: 15px; border-left: 5px solid #FF6B35;">
                                 <p style="font-size: 20px; line-height: 1.6;">
                                     <strong>Возврат инвестиций:</strong><br>
-                                    через 3-4 месяца работы при консервативном сценарии
+                                    через 8-10 месяцев работы при консервативном сценарии
                                 </p>
                             </div>
                         </div>
@@ -679,8 +703,8 @@
             <div class="slide-content">
                 <div style="margin-top: 20px;">
                     <div class="list-item">
-                        <strong>Сезонность (летние каникулы)</strong><br>
-                        <small>Меры: финансовая подушка, переориентация на жителей района, агрегаторы доставки</small>
+                        <strong>Сезонность (летние каникулы) — ГЛАВНАЯ УГРОЗА</strong><br>
+                        <small>Меры: финансовая подушка 150-200к₽, переориентация на жителей района, агрегаторы доставки</small>
                     </div>
                     <div class="list-item">
                         <strong>Усиление конкуренции</strong><br>
@@ -692,12 +716,12 @@
                     </div>
                     <div class="list-item">
                         <strong>Проблемы с персоналом</strong><br>
-                        <small>Меры: конкурентная зарплата, система мотивации, резервные кандидаты</small>
+                        <small>Меры: конкурентная зарплата 35 000₽, система мотивации, резервные кандидаты</small>
                     </div>
                 </div>
                 <div style="margin-top: 30px; padding: 25px; background: linear-gradient(135deg, #FF6B35 0%, #FDB827 100%); border-radius: 20px; color: white; box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);">
                     <strong style="font-size: 24px;">✅ Даже при пессимистичном сценарии (-30% продаж)</strong><br>
-                    <p style="font-size: 20px; margin-top: 15px;">Проект остаётся прибыльным с окупаемостью 4,3 месяца и ROI 280%</p>
+                    <p style="font-size: 20px; margin-top: 15px;">Проект остаётся прибыльным с окупаемостью 10-12 месяцев и ROI 25-30%</p>
                 </div>
             </div>
         </div>
@@ -756,11 +780,11 @@
                 <div style="margin-top: 40px; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
                     <h3 style="color: #FF6B35; margin-bottom: 20px; font-size: 28px;">💼 Стратегия выхода</h3>
                     <div style="font-size: 20px; line-height: 2;">
-                        <p><strong>Через 12 месяцев:</strong> стоимость бизнеса 1,2-1,4 млн₽</p>
-                        <p><strong>Через 24 месяца:</strong> стоимость бизнеса 1,8-2,25 млн₽</p>
-                        <p><strong>Через 36 месяцев:</strong> сеть стоимостью 5-7 млн₽</p>
+                        <p><strong>Через 12 месяцев:</strong> стоимость бизнеса 1,0-1,4 млн₽</p>
+                        <p><strong>Через 24 месяца:</strong> стоимость бизнеса 1,5-2,2 млн₽</p>
+                        <p><strong>Через 36 месяцев:</strong> сеть стоимостью 4-6 млн₽</p>
                         <p style="margin-top: 20px; padding: 20px; background: linear-gradient(135deg, #FF6B35 0%, #FDB827 100%); color: white; border-radius: 15px;">
-                            <strong>ROI для инвестора: от 343% до 2000%</strong>
+                            <strong>ROI для инвестора: от 34% до 300%</strong>
                         </p>
                     </div>
                 </div>
@@ -774,8 +798,8 @@
                 <div style="font-size: 32px; margin: 40px 0; line-height: 1.8;">
                     <p><strong>350 000₽</strong> инвестиций</p>
                     <p style="margin: 20px 0;">превратятся в бизнес стоимостью</p>
-                    <p><strong style="font-size: 48px; color: #ffd700;">1,5-2,5 млн₽</strong></p>
-                    <p style="margin: 20px 0;">всего за 12-24 месяца</p>
+                    <p><strong style="font-size: 48px; color: #ffd700;">1,2-2 млн₽</strong></p>
+                    <p style="margin: 20px 0;">всего за 18-24 месяца</p>
                 </div>
                 <div style="margin-top: 50px; font-size: 28px;">
                     <p>📞 Свяжитесь с нами для обсуждения деталей</p>
